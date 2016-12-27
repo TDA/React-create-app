@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+//
+// TODO: create the ability to add multiple goals individually and track time for each of them
+// Goals should be addable with dates for each, maybe using localstorage or something?
+// Goals can be SLA'd, i.e. when they are close to deadline, we should have color changes and stuff
 
 class Counter extends Component {
   constructor() {
@@ -52,7 +56,7 @@ class App extends Component {
           <h2>Goals Tracker</h2>
         </div>
         <p className="App-intro">
-          Days to goal:
+          Time to goal:
         </p>
         <Counter />
       </div>
