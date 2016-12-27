@@ -26,10 +26,18 @@ class Counter extends Component {
     return Math.floor(diff/(1000));
   }
 
+  getTimeString(count) {
+    var minutes = Math.floor(count/(60));
+    var hours = Math.floor(minutes/(60));
+    var days = Math.floor(hours/(24));
+    return "" + days + " days " + hours % 24 + " hours " + minutes % 60 + " mins "
+  }
+
   render() {
     return (
       <div className="counter">
-        {this.state.count}
+        {this.state.count} seconds, which is roughly:<br/>
+        {this.getTimeString(this.state.count)}
       </div>
     )
   }
@@ -41,11 +49,10 @@ class App extends Component {
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>Goals Tracker</h2>
         </div>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-          lol is this even going to work?
+          Days to goal:
         </p>
         <Counter />
       </div>
