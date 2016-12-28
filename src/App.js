@@ -47,6 +47,17 @@ class Counter extends Component {
   }
 }
 
+class Goals extends Component {
+  render() {
+    return (
+      <p className="App-intro">
+        Time to goal:
+        <Counter />
+      </p>
+    )
+  }
+}
+
 class App extends Component {
   render() {
     return (
@@ -55,10 +66,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Goals Tracker</h2>
         </div>
-        <p className="App-intro">
-          Time to goal:
-        </p>
-        <Counter />
+        <Goals />
       </div>
     );
   }
