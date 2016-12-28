@@ -7,10 +7,11 @@ import './App.css';
 // Goals can be SLA'd, i.e. when they are close to deadline, we should have color changes and stuff
 
 class Counter extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      count: this.countDays()
+      count: this.countDays(props.endDate),
+      endDate: props.endDate
     }
   }
 
@@ -18,19 +19,20 @@ class Counter extends Component {
     var self = this;
     setInterval(function() {
       self.setState({
-        count: self.countDays()
+        count: self.countDays(self.state.endDate)
       });
     }, 1000);
   }
 
-  countDays() {
-    var goalDate = new Date("07/07/2017");
+  countDays(endDate) {
+    var goalDate = new Date(endDate);
     var today = new Date();
     var diff = goalDate - today;
     return Math.floor(diff/(1000));
   }
 
-  getTimeString(count) {
+  getTimeString() {
+    var count = this.state.count;
     var minutes = Math.floor(count/(60));
     var hours = Math.floor(minutes/(60));
     var days = Math.floor(hours/(24));
@@ -40,33 +42,58 @@ class Counter extends Component {
   render() {
     return (
       <div className="counter">
-        {this.state.count} seconds, which is roughly:<br/>
-        {this.getTimeString(this.state.count)}
+        {this.getTimeString()}
       </div>
     )
   }
 }
 
-class Goals extends Component {
+class Goal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      goalCompletionDate: props.date,
+      goalName: props.name
+    }
+  }
+
   render() {
     return (
-      <p className="App-intro">
-        Time to goal:
-        <Counter />
-      </p>
+      <div className="goal">
+        <div className="goal-name">
+          {this.state.goalName}
+        </div>
+        <div className="goal-date">
+          <Counter endDate={this.state.goalCompletionDate}/>
+        </div>
+      </div>
     )
   }
 }
 
 class App extends Component {
   render() {
+    var goals = [
+      {
+        name: 'Promotion',
+        date: '7/17/2017'
+      },
+      {
+        name: 'India trip',
+        date: '3/17/2017'
+      }
+    ];
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Goals Tracker</h2>
         </div>
-        <Goals />
+        {
+          goals.map(function (goal) {
+            return <Goal name={goal.name} date={goal.date} key={goal.name} />
+          })
+        }
       </div>
     );
   }
