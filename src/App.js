@@ -1,7 +1,3 @@
-
-// Goals should be addable with dates for each, maybe using localstorage or something?
-// Goals can be SLA'd, i.e. when they are close to deadline, we should have color changes and stuff
-
 class Goals extends React.Component {
   constructor(props) {
     super(props);
@@ -63,7 +59,7 @@ class GoalsDisplayComponent extends React.Component {
         {
           goals.map(function (goal) {
             return (
-              <div className="goal card" key={goal.name}>
+              <div className="goal card {goal}" key={goal.name}>
                 <div className="card-block">
                   <h4 className="goal-name card-title">
                     {goal.name}
