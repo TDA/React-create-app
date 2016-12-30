@@ -1,9 +1,8 @@
 /**
  * Created by schandramouli on 12/29/16.
  */
-import React, { Component } from 'react';
 
-class Counter extends Component {
+class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,5 +43,3 @@ class Counter extends Component {
     )
   }
 }
-
-export default Counter;
