@@ -27,6 +27,7 @@
   width: 160px;
   margin: 5px;
   display: inline-block;
+  vertical-align: top;
 }
 
 .goal-name {

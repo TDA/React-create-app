@@ -1,5 +1,4 @@
-//
-// create the ability to add multiple goals individually and track time for each of them -- DONE!!
+
 // Goals should be addable with dates for each, maybe using localstorage or something?
 // Goals can be SLA'd, i.e. when they are close to deadline, we should have color changes and stuff
 
@@ -9,7 +8,7 @@ class Goals extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {goals: [], name: '', completionDate: ''};
+    this.state = JSON.parse(localStorage.getItem("Goals")) || {goals: [], name: '', completionDate: ''};
   }
 
   render() {
@@ -48,7 +47,11 @@ class Goals extends React.Component {
       goals: prevState.goals.concat(newGoal),
       name: '',
       completionDate: ''
-    }));
+    }), this.storeData);
+  }
+
+  storeData() {
+    localStorage.setItem("Goals", JSON.stringify(this.state));
   }
 }
 
@@ -60,14 +63,14 @@ class GoalsDisplayComponent extends React.Component {
         {
           goals.map(function (goal) {
             return (
-              <div className="goal card">
+              <div className="goal card" key={goal.name}>
                 <div className="card-block">
                   <h4 className="goal-name card-title">
                     {goal.name}
                   </h4>
-                  <p className="goal-date card-text">
+                  <div className="goal-date card-text">
                     <Counter endDate={goal.completionDate} />
-                  </p>
+                  </div>
                 </div>
               </div>
             )
