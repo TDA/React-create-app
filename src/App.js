@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Counter from './Counter.js';
 import logo from './logo.svg';
 import './App.css';
 //
@@ -6,67 +7,73 @@ import './App.css';
 // Goals should be addable with dates for each, maybe using localstorage or something?
 // Goals can be SLA'd, i.e. when they are close to deadline, we should have color changes and stuff
 
-class Counter extends Component {
+class GoalInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      count: this.countDays(props.endDate),
-      endDate: props.endDate
-    }
-  }
-
-  componentDidMount() {
-    var self = this;
-    setInterval(function() {
-      self.setState({
-        count: self.countDays(self.state.endDate)
-      });
-    }, 1000);
-  }
-
-  countDays(endDate) {
-    var goalDate = new Date(endDate);
-    var today = new Date();
-    var diff = goalDate - today;
-    return Math.floor(diff/(1000));
-  }
-
-  getTimeString() {
-    var count = this.state.count;
-    var minutes = Math.floor(count/(60));
-    var hours = Math.floor(minutes/(60));
-    var days = Math.floor(hours/(24));
-    return "" + days + " days " + hours % 24 + " hours " + minutes % 60 + " mins "
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {goals: [], name: '', date: ''};
   }
 
   render() {
     return (
-      <div className="counter">
-        {this.getTimeString()}
+      <div>
+        <GoalsDisplayComponent goals={this.state.goals} />
+        <h3>Add Goal</h3>
+        <form onSubmit={this.handleSubmit}>
+          <input onChange={this.handleNameChange} value={this.state.name} />
+          <input onChange={this.handleDateChange} value={this.state.date} />
+          <button>{'Add #' + (this.state.goals.length + 1) + ' Goal'}</button>
+        </form>
       </div>
-    )
+    );
+  }
+
+  handleNameChange(e) {
+    this.setState({name: e.target.value});
+  }
+
+  handleDateChange(e) {
+    this.setState({date: e.target.value});
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    let newGoal = {
+      name: this.state.name,
+      date: this.state.date
+    };
+    this.setState((prevState) => ({
+      goals: prevState.goals.concat(newGoal),
+      name: '',
+      date: ''
+    }));
   }
 }
 
-class Goal extends Component {
+class GoalsDisplayComponent extends Component {
   constructor(props) {
+    // this is only to hold state of a goal, technically we can just have used .props
+    // to access that same data, as we don't modify state here at all
     super(props);
     this.state = {
-      goalCompletionDate: props.date,
-      goalName: props.name
+      goals: props.goals
     }
   }
 
   render() {
     return (
-      <div className="goal">
-        <div className="goal-name">
-          {this.state.goalName}
+      this.state.goals.map(function (goal) {
+        return <div className="goal">
+          <div className="goal-name">
+            {goal.name}
+          </div>
+          <div className="goal-date">
+            <Counter endDate={goal.goalCompletionDate}/>
+          </div>
         </div>
-        <div className="goal-date">
-          <Counter endDate={this.state.goalCompletionDate}/>
-        </div>
-      </div>
+      })
     )
   }
 }
@@ -83,17 +90,14 @@ class App extends Component {
         date: '3/17/2017'
       }
     ];
+
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Goals Tracker</h2>
         </div>
-        {
-          goals.map(function (goal) {
-            return <Goal name={goal.name} date={goal.date} key={goal.name} />
-          })
-        }
+      <GoalInput />
       </div>
     );
   }
